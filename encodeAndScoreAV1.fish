@@ -29,10 +29,12 @@ for preset in 6 7 8 9 10
                     continue
                 end
 
-                trap "" SIGINT
+                # Auto clean on CTRL+C
+                trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; ./removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
 
                 ## time ffmpeg...
 
+                # Remove auto clean
                 trap - SIGINT
             end
         end
