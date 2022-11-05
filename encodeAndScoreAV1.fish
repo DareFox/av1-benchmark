@@ -22,10 +22,18 @@ for preset in 6 7 8 9 10
                 set filenameExport "$basenameExport.mkv"
                 set ffmpegLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).ffmpeg.log"
                 set gnuTimeLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).gnu-time.log"
-            
-                cat $processedFilesList | grep "^take tv\$"   
 
+                # Check if file was already processed
+                if cat $processedFilesList | grep "^$basenameExport\$"   
+                    echo "$processedFilesList was already processed. Skipping..."
+                    continue
+                end
 
+                trap "" SIGINT
+
+                ## time ffmpeg...
+
+                trap - SIGINT
             end
         end
     end
