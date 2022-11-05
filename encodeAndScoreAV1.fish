@@ -43,6 +43,9 @@ for preset in 6 7 8 9 10
     
                 # Remove auto clean
                 trap - SIGINT
+
+                # Add to processed list
+                echo $basenameExport >> $processedFilesList
             end
         end
     end
