@@ -25,7 +25,7 @@ for preset in 6 7 8 9 10
 
                 # Check if file was already processed
                 if cat $processedFilesList | grep "^$basenameExport\$"   
-                    echo "$processedFilesList was already processed. Skipping..."
+                    echo "$basenameExport was already processed. Skipping..."
                     continue
                 end
 
