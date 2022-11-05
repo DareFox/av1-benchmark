@@ -29,11 +29,13 @@ for preset in 6 7 8 9 10
                     continue
                 end
 
+                set -x FFREPORT file=$ffmpegLogFileExport
                 # Auto clean on CTRL+C
                 trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; ./removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
 
-                ## time ffmpeg...
-
+                time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf \
+                -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -map 0:v -map 0:a -c:a libopus -b:a 128k $resultsFolder/$filenameExport
+    
                 # Remove auto clean
                 trap - SIGINT
             end
