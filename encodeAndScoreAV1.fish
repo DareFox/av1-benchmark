@@ -6,7 +6,7 @@ set basedirSample $(dirname $sample)
 set exportExtension "mkv"
 
 # ffmpeg uses only 1 thread for vmaf scoring
-set parallelVmafJobs 5
+set parallelVmafJobs 7
 
 set resultsFolder $basedirSample/$basenameSample-RESULTS
 set scriptFolder (dirname (status --current-filename))
@@ -32,7 +32,7 @@ for preset in $presets
     for crf in $crfs
         for filmGrain in $filmGrains
             for fastDecode in $fastDecodes
-                set basenameExport "sample-$sample=preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
+                set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
                 set filenameExport "$resultsFolder/$basenameExport.$exportExtension"
                 set ffmpegLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).ffmpeg.log"
                 set gnuTimeLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
