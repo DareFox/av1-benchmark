@@ -31,6 +31,9 @@ for preset in 6 7 8 9 10
                 end
 
                 set -x FFREPORT file=$ffmpegLogFileExport
+                echo -n "----------"
+                echo -n "FFREPORT file set to $ffmpegLogFileExport"
+                
                 # Auto clean on CTRL+C
                 trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; ./removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
 
