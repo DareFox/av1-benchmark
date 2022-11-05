@@ -50,3 +50,7 @@ for preset in 6 7 8 9 10
         end
     end
 end
+
+echo "Starting VMAF scoring"
+parallel -j 5 ./scoreVideo.fish $resultsFolder $sample ::: $resultsFolder/*.mkv
+echo "Finished"
