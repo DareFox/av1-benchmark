@@ -3,6 +3,7 @@
 set sample $argv[1]
 set basenameSample $(basename $sample)
 set basedirSample $(dirname $sample)
+set exportExtension "mkv"
 
 set resultsFolder $basedirSample/$basenameSample-RESULTS
 
@@ -19,7 +20,7 @@ for preset in 6 7 8 9 10
         for filmGrain in 0 3 6 9 11
             for fastDecode in 0 1
                 set basenameExport "sample-$sample=preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
-                set filenameExport "$basenameExport.mkv"
+                set filenameExport "$basenameExport.$exportExtension"
                 set ffmpegLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).ffmpeg.log"
                 set gnuTimeLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).gnu-time.log"
 
