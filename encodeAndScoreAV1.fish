@@ -33,8 +33,8 @@ for preset in $presets
             for fastDecode in $fastDecodes
                 set basenameExport "sample-$sample=preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
                 set filenameExport "$resultsFolder/$basenameExport.$exportExtension"
-                set ffmpegLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).ffmpeg.log"
-                set gnuTimeLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).gnu-time.log"
+                set ffmpegLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).ffmpeg.log"
+                set gnuTimeLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
 
                 # Check if file was already processed
                 if cat $processedFilesList | grep --quiet "^$basenameExport\$"   
