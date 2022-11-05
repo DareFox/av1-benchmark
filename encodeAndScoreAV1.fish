@@ -9,6 +9,7 @@ set exportExtension "mkv"
 set parallelVmafJobs 5
 
 set resultsFolder $basedirSample/$basenameSample-RESULTS
+set scriptFolder (dirname (status --current-filename))
 
 if not test -f $sample
     echo "$sample doesn't exist!"
@@ -47,7 +48,7 @@ for preset in $presets
                 echo "FFREPORT file set to $ffmpegLogFileExport"
                 
                 # Auto clean on CTRL+C
-                trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; ./removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
+                trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
 
                 command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf \
                 -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
@@ -63,5 +64,6 @@ for preset in $presets
 end
 
 echo "Starting VMAF scoring"
-parallel -j $parallelVmafJobs ./scoreVideo.fish $resultsFolder $sample ::: $resultsFolder/*.mkv
-echo "Finished"
+
+parallel -j $parallelVmafJobs $scriptFolder/scoreVideo.fish $resultsFolder $sample ::: $resultsFolder/*.mkv
+echo "Finished! :)"
