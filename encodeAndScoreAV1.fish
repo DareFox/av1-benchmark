@@ -18,7 +18,7 @@ for preset in 6 7 8 9 10
     for crf in 20 22 24 26
         for filmGrain in 0 3 6 9 11
             for fastDecode in 0 1
-                set basenameExport "preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
+                set basenameExport "sample-$sample=preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
                 set filenameExport "$basenameExport.mkv"
                 set ffmpegLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).ffmpeg.log"
                 set gnuTimeLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).gnu-time.log"
