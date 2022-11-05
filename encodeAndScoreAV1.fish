@@ -10,6 +10,11 @@ set parallelVmafJobs 5
 
 set resultsFolder $basedirSample/$basenameSample-RESULTS
 
+if not test -f $sample
+    echo "$sample doesn't exist!"
+    exit 1
+end
+
 if not test -d $resultsFolder
     mkdir $resultsFolder
 end
