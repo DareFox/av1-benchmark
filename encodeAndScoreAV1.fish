@@ -32,9 +32,9 @@ for preset in $presets
         for filmGrain in $filmGrains
             for fastDecode in $fastDecodes
                 set basenameExport "sample-$sample=preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
-                set filenameExport "$basenameExport.$exportExtension"
-                set ffmpegLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).ffmpeg.log"
-                set gnuTimeLogFileExport "$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).gnu-time.log"
+                set filenameExport "$resultsFolder/$basenameExport.$exportExtension"
+                set ffmpegLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).ffmpeg.log"
+                set gnuTimeLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H:%M:%S%Z).gnu-time.log"
 
                 # Check if file was already processed
                 if cat $processedFilesList | grep --quiet "^$basenameExport\$"   
@@ -50,7 +50,7 @@ for preset in $presets
                 trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; ./removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
 
                 command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf \
-                -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -map 0:v -map 0:a -c:a libopus -b:a 128k $resultsFolder/$filenameExport 2>&1 | tee $gnuTimeLogFileExport
+                -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
     
                 # Remove auto clean
                 trap - SIGINT
