@@ -5,6 +5,9 @@ set basenameSample $(basename $sample)
 set basedirSample $(dirname $sample)
 set exportExtension "mkv"
 
+# ffmpeg uses only 1 thread for vmaf scoring
+set parallelVmafJobs 5
+
 set resultsFolder $basedirSample/$basenameSample-RESULTS
 
 if not test -d $resultsFolder
@@ -52,5 +55,5 @@ for preset in 6 7 8 9 10
 end
 
 echo "Starting VMAF scoring"
-parallel -j 5 ./scoreVideo.fish $resultsFolder $sample ::: $resultsFolder/*.mkv
+parallel -j $parallelVmafJobs ./scoreVideo.fish $resultsFolder $sample ::: $resultsFolder/*.mkv
 echo "Finished"
