@@ -33,7 +33,7 @@ for preset in $presets
         for filmGrain in $filmGrains
             for fastDecode in $fastDecodes
                 set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
-                set filenameExport "$resultsFolder/$basenameExport.$exportExtension"
+                set filenameExport "$resultsFolder/$basenameExport$exportExtension"
                 set ffmpegLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).ffmpeg.log"
                 set gnuTimeLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
 
