@@ -3,7 +3,7 @@
 set sample $argv[1]
 set basenameSample $(basename $sample)
 set basedirSample $(dirname $sample)
-set exportExtension "mkv"
+set exportExtension $(path extension $sample)
 
 # ffmpeg uses only 1 thread for vmaf scoring
 set parallelVmafJobs 7
