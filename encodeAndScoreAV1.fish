@@ -60,7 +60,7 @@ for preset in $presets
                 trap - SIGINT
 
                 # Append start date to beginning of log files
-                sed -i '1s/^/Started at $dateStart\n/' $ffmpegLogFileExport $gnuTimeLogFileExport
+                sed -i "1s/^/Started at $dateStart\n/" $ffmpegLogFileExport $gnuTimeLogFileExport
                 
                 # Add exported file to processed list
                 echo $filenameWithExtension >> $processedFilesList
