@@ -36,8 +36,9 @@ for preset in $presets
                 set filenameWithExtension "$basenameExport$exportExtension"
                 
                 set filenameExport "$resultsFolder/$filenameWithExtension"
-                set ffmpegLogFileExport "$resultsFolder/$filenameWithExtension-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).ffmpeg.log"
-                set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
+                set dateStart (date -u +%Y-%m-%dT%H-%M-%S%Z)
+                set ffmpegLogFileExport "$resultsFolder/$filenameWithExtension.ffmpeg.log"
+                set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension.gnu-time.log"
 
                 # Check if file was already processed
                 if cat $processedFilesList | grep --quiet "^$filenameWithExtension\$"   
@@ -58,8 +59,11 @@ for preset in $presets
                 # Remove auto clean
                 trap - SIGINT
 
-                # Add to processed list
-                echo $basenameExport$exportExtension >> $processedFilesList
+                # Append start date to beginning of log files
+                sed -i '1s/^/Started at $dateStart\n/' $ffmpegLogFileExport $gnuTimeLogFileExport
+                
+                # Add exported file to processed list
+                echo $filenameWithExtension >> $processedFilesList
             end
         end
     end
