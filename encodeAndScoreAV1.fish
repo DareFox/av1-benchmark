@@ -33,9 +33,11 @@ for preset in $presets
         for filmGrain in $filmGrains
             for fastDecode in $fastDecodes
                 set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
-                set filenameExport "$resultsFolder/$basenameExport$exportExtension"
-                set ffmpegLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).ffmpeg.log"
-                set gnuTimeLogFileExport "$resultsFolder/$basenameExport-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
+                set filenameWithExtension "$basenameExport$exportExtension"
+                
+                set filenameExport "$resultsFolder/$filenameWithExtension"
+                set ffmpegLogFileExport "$resultsFolder/$filenameWithExtension-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).ffmpeg.log"
+                set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
 
                 # Check if file was already processed
                 if cat $processedFilesList | grep --quiet "^$basenameExport\$"   
@@ -48,7 +50,7 @@ for preset in $presets
                 echo "FFREPORT file set to $ffmpegLogFileExport"
                 
                 # Auto clean on CTRL+C
-                trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $basenameExport; exit" SIGINT
+                trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $filenameWithExtension; exit" SIGINT
 
                 command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf \
                 -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
@@ -57,7 +59,7 @@ for preset in $presets
                 trap - SIGINT
 
                 # Add to processed list
-                echo $basenameExport >> $processedFilesList
+                echo $basenameExport$exportExtension >> $processedFilesList
             end
         end
     end
