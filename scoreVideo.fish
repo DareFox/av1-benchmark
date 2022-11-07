@@ -23,4 +23,6 @@ if test -f $logPath
     end
 end
 
+trap "echo \nCaught SIGINT!\nRemoving current log \($logPath\); rm $logPath; exit" SIGINT
 command time -f $gnuTimeFormat ffmpeg -i $distorted -i $original -threads 12 -filter_complex libvmaf -f null - 2>&1 | tee $logPath
+trap - SIGINT
