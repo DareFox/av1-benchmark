@@ -8,7 +8,7 @@ if not test -f $folder/$processedFileList
     exit 1
 end
 
-echo "Preset;CRF;Film Grain Level;Is Fast Decode used;VMAF Score;Encode elapsed time in seconds;Size in MiB;Sample name" > $csvFile
+echo "Preset;CRF;Film Grain Level;Is Fast Decode used;VMAF Score;Encode elapsed time in seconds;Size in MiB;Encoded filename" > $csvFile
 
 cat $folder/$processedFileList | while read -l fileBasename
     set filename $folder/$fileBasename
