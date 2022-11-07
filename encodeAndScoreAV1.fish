@@ -40,7 +40,7 @@ for preset in $presets
                 set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension-time=$(date -u +%Y-%m-%dT%H-%M-%S%Z).gnu-time.log"
 
                 # Check if file was already processed
-                if cat $processedFilesList | grep --quiet "^$basenameExport\$"   
+                if cat $processedFilesList | grep --quiet "^$filenameWithExtension\$"   
                     echo "$basenameExport was already processed. Skipping..."
                     continue
                 end
