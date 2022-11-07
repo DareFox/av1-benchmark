@@ -15,10 +15,10 @@ cat $folder/$processedFileList | while read -l fileBasename
 
     set encodeTimeSeconds (cat $filename*.gnu-time.log | grep -Po '(?<=Elapsed real time: )\\S*(?=s)')
     set vmafScore (cat $filename.vmaf.log | grep -Po '(?<=VMAF score: )\\S*') 
-    set preset (echo $filename | grep -Po '(?<=preset=)[^-]*')
-    set crf (echo $filename | grep -Po '(?<=crf=)[^-]*')   
-    set filmGrain (echo $filename | grep -Po '(?<=filmGrain=)[^-]*')   
-    set fastDecode (echo $filename | grep -Po '(?<=fastDecode=)[^-]*')   
+    set preset (echo $filename | grep -Po '(?<=preset=)\d*')
+    set crf (echo $filename | grep -Po '(?<=crf=)\d*')   
+    set filmGrain (echo $filename | grep -Po '(?<=filmGrain=)\d*')   
+    set fastDecode (echo $filename | grep -Po '(?<=fastDecode=)\d*')   
     set mibSize (du -s -k $filename | awk '{printf "%.3f MiB %s\n", $1/1024, $2}' | grep -Po '.*(?=MiB)')
     
     echo "$preset;$crf;$filmGrain;$fastDecode;$vmafScore;$encodeTimeSeconds;$mibSize;$filename" >> $csvFile
