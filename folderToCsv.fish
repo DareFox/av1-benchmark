@@ -19,7 +19,7 @@ cat $folder/$processedFileList | while read -l fileBasename
     set crf (echo $filename | grep -Po '(?<=crf=)[^-]*')   
     set filmGrain (echo $filename | grep -Po '(?<=filmGrain=)[^-]*')   
     set fastDecode (echo $filename | grep -Po '(?<=fastDecode=)[^-]*')   
-    set mibSize (du -s -k $filename.mkv | awk '{printf "%.3f MiB %s\n", $1/1024, $2}' | grep -Po '.*(?=MiB)')
+    set mibSize (du -s -k $filename | awk '{printf "%.3f MiB %s\n", $1/1024, $2}' | grep -Po '.*(?=MiB)')
     
     echo "$preset;$crf;$filmGrain;$fastDecode;$vmafScore;$encodeTimeSeconds;$mibSize;$filename" >> $csvFile
     echo "Processed $filename"
