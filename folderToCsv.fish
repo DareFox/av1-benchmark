@@ -21,6 +21,6 @@ cat $folder/$processedFileList | while read -l fileBasename
     set fastDecode (echo $filename | grep -Po '(?<=fastDecode=)\d*')   
     set mibSize (du -s -k $filename | awk '{printf "%.3f MiB %s\n", $1/1024, $2}' | grep -Po '.*(?=MiB)')
     
-    echo "$preset;$crf;$filmGrain;$fastDecode;$vmafScore;$encodeTimeSeconds;$mibSize;$filename" >> $csvFile
-    echo "Processed $filename"
+    echo "$preset;$crf;$filmGrain;$fastDecode;$vmafScore;$encodeTimeSeconds;$mibSize;$fileBasename" >> $csvFile
+    echo "Processed $fileBasename"
 end
