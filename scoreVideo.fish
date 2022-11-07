@@ -5,7 +5,6 @@ set original $argv[2]
 set distorted $argv[3]
 
 printf "VMAF Rating\n\tOriginal: $original\n\tDistorted: $distorted"
-printf "\nLogs will be written to $outputTo\n"
 
 set nameDistorted $(basename $distorted)
 set logPath $outputTo/$nameDistorted.vmaf.log
@@ -22,6 +21,8 @@ if test -f $logPath
         mv $logPath $logPath.old
     end
 end
+
+printf "\nLogs will be written to $outputTo\n"
 
 trap "echo \nCaught SIGINT!\nRemoving current log \($logPath\); rm $logPath; exit" SIGINT
 command time -f $gnuTimeFormat ffmpeg -i $distorted -i $original -threads 12 -filter_complex libvmaf -f null - 2>&1 | tee $logPath
