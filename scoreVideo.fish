@@ -16,7 +16,7 @@ if test -f $logPath
         printf "$distorted was already scored\nYou can get score in $logPath.\nSkipping..."
         exit 1
     else
-        printf "VMAF log does exist, but doesn't have score. Maybe because it's borked."
+        printf "VMAF log does exist, but doesn't have score. Maybe because it's borked.\n"
         printf "Renaming old VMAF log to create a valid score"
         mv $logPath $logPath.old
     end
