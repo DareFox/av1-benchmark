@@ -4,7 +4,7 @@ set original $argv[2]
 
 set distorted $argv[3]
 
-printf "VMAF Rating\n\tOriginal: $original\n\tDistorted: $distorted"
+printf "VMAF Rating\n\tOriginal: $original\n\tDistorted: $distorted\n"
 
 set nameDistorted $(basename $distorted)
 set logPath $outputTo/$nameDistorted.vmaf.log
@@ -13,11 +13,11 @@ set gnuTimeFormat "Time result\nCommand: %C\nExit code: %x\n\nSimplified elapsed
 
 if test -f $logPath
     if cat $logPath | grep -Poq '(?<=VMAF score: )\\S*'
-        echo "$distorted was already scored ($logPath). Skipping..."
+        printf "$distorted was already scored\nYou can get score in $logPath.\nSkipping..."
         exit 1
     else
-        echo "VMAF log does exist, but doesn't have score. Maybe because it's borked."
-        echo "Renaming old VMAF log to create a valid score"
+        printf "VMAF log does exist, but doesn't have score. Maybe because it's borked."
+        printf "Renaming old VMAF log to create a valid score"
         mv $logPath $logPath.old
     end
 end
