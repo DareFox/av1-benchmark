@@ -10,7 +10,9 @@ end
 
 echo "Preset;CRF;Film Grain Level;Is Fast Decode used;VMAF Score;Encode elapsed time in seconds;Size in MiB;Sample name" > $csvFile
 
-cat $folder/$processedFileList | while read -l filename
+cat $folder/$processedFileList | while read -l fileBasename
+    set filename $folder/$fileBasename
+
     set encodeTimeSeconds (cat $filename*.gnu-time.log | grep -Po '(?<=Elapsed real time: )\\S*(?=s)')
     set vmafScore (cat $filename.vmaf.log | grep -Po '(?<=VMAF score: )\\S*') 
     set preset (echo $filename | grep -Po '(?<=preset=)[^-]*')
