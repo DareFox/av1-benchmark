@@ -24,6 +24,7 @@ set presets 6 7 8 9 10
 set crfs 20 22 24 26
 set filmGrains 0 3 6 9 11
 set fastDecodes 0 1
+set colorBits 8 10
 
 for preset in $presets
     for crf in $crfs
@@ -48,11 +49,11 @@ for preset in $presets
                 echo "----------"
                 echo "FFREPORT file set to $ffmpegLogFileExport"
 
-                if $color -eq 8
-                    set PIX_FMT "-pix_fmt yuv420p10le"
-                else if $color -eq 10
-                    set PIX_FMT "-pix_fmt yuv420p"
-                else if $color -eq 0  
+                if test $color -eq 8
+                    set PIX_FMT "-pix_fmt" "yuv420p10le"
+                else if test $color -eq 10
+                    set PIX_FMT "-pix_fmt" "yuv420p"
+                else if test $color -eq 0  
                     set PIX_FMT ""
                 else
                     echo "ERROR! Variable color bit ($color) is not 8 nor 10, nor 0 (auto)"
