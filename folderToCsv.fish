@@ -8,7 +8,7 @@ if not test -f $folder/$processedFileList
     exit 1
 end
 
-echo "Preset;CRF;Film Grain Level;Is Fast Decode used;VMAF Score;Encode elapsed time in seconds;Size in MiB;Encoded filename" > $csvFile
+echo "Encoded filename;Preset;CRF;Film Grain Level;Is Fast Decode used;VMAF Score;Encode elapsed time in seconds;Size in MiB" > $csvFile
 
 cat $folder/$processedFileList | while read -l fileBasename
     set filename $folder/$fileBasename
@@ -21,6 +21,6 @@ cat $folder/$processedFileList | while read -l fileBasename
     set fastDecode (echo $filename | grep -Po '(?<=fastDecode=)\d*')   
     set mibSize (du -s -k $filename | awk '{printf "%.3f MiB %s\n", $1/1024, $2}' | grep -Po '.*(?=MiB)' | sed 's/\./,/')
     
-    echo "$preset;$crf;$filmGrain;$fastDecode;$vmafScore;$encodeTimeSeconds;$mibSize;$fileBasename" >> $csvFile
+    echo "$fileBasename;$preset;$crf;$filmGrain;$fastDecode;$vmafScore;$encodeTimeSeconds;$mibSize" >> $csvFile
     echo "Processed $fileBasename"
 end
