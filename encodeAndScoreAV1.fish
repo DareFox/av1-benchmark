@@ -68,7 +68,7 @@ end
 
 echo "Starting VMAF scoring"
 
-for file in $resultsFolder/*.mkv
+for file in $resultsFolder/*.$exportExtension
      $scriptFolder/scoreVideo.fish $resultsFolder $sample $file
 end
 echo "Finished! :)"
