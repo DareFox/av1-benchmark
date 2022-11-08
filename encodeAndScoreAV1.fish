@@ -82,7 +82,7 @@ end
 
 echo "Starting VMAF scoring"
 
-for file in $resultsFolder/*.$exportExtension
+for file in $resultsFolder/*$exportExtension
      $scriptFolder/scoreVideo.fish $resultsFolder $sample $file
 end
 echo "Finished! :)"
