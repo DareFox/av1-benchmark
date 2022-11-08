@@ -24,6 +24,9 @@ end
 
 printf "\nLogs will be written to $outputTo\n"
 
+
 trap "echo \nCaught SIGINT!\nRemoving current log \($logPath\); rm $logPath; exit" SIGINT
-command time -f $gnuTimeFormat ffmpeg -i $distorted -i $original -threads 12 -filter_complex libvmaf -f null - 2>&1 | tee $logPath
+set threadsNum $(nproc)
+echo "Threads to use: $threadsNum (from nproc)"
+command time -f $gnuTimeFormat ffmpeg -i $distorted -i $original -lavfi libvmaf="n_threads=$threadsNum" -f null - 2>&1 | tee $logPath
 trap - SIGINT
