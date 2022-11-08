@@ -5,9 +5,6 @@ set basenameSample $(basename $sample)
 set basedirSample $(dirname $sample)
 set exportExtension $(path extension $sample)
 
-# ffmpeg uses only 1 thread for vmaf scoring
-set parallelVmafJobs 7
-
 set resultsFolder $basedirSample/$basenameSample-RESULTS
 set scriptFolder (dirname (status --current-filename))
 
@@ -71,5 +68,7 @@ end
 
 echo "Starting VMAF scoring"
 
-parallel -j $parallelVmafJobs $scriptFolder/scoreVideo.fish $resultsFolder $sample ::: $resultsFolder/*.mkv
+for file in $resultsFolder/*.mkv
+     $scriptFolder/scoreVideo.fish $resultsFolder $sample $file
+end
 echo "Finished! :)"
