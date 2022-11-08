@@ -29,7 +29,8 @@ for preset in $presets
     for crf in $crfs
         for filmGrain in $filmGrains
             for fastDecode in $fastDecodes
-                set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode"
+            for color in $colorBits    
+                set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode-color=$color"
                 set filenameWithExtension "$basenameExport$exportExtension"
                 
                 set filenameExport "$resultsFolder/$filenameWithExtension"
@@ -46,11 +47,22 @@ for preset in $presets
                 set -x FFREPORT file=$ffmpegLogFileExport
                 echo "----------"
                 echo "FFREPORT file set to $ffmpegLogFileExport"
+
+                if $color -eq 8
+                    set PIX_FMT "-pix_fmt yuv420p10le"
+                else if $color -eq 10
+                    set PIX_FMT "-pix_fmt yuv420p"
+                else if $color -eq 0  
+                    set PIX_FMT ""
+                else
+                    echo "ERROR! Variable color bit ($color) is not 8 nor 10, nor 0 (auto)"
+                    exit 1
+                end
                 
                 # Auto clean on CTRL+C
                 trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $filenameWithExtension; exit" SIGINT
 
-                command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf \
+                command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf $PIX_FMT \
                 -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
     
                 # Remove auto clean
@@ -61,6 +73,7 @@ for preset in $presets
                 
                 # Add exported file to processed list
                 echo $filenameWithExtension >> $processedFilesList
+            end
             end
         end
     end
