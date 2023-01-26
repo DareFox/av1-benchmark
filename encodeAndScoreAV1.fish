@@ -1,5 +1,12 @@
 #!/bin/env fish
 
+# ADD OR CHANGE FFMPEG OPTIONS HERE
+set presets 9 10 11 12 13
+set crfs 24 26 28 30 32 34 36 38 40 42 44
+set filmGrains 0
+set fastDecodes 1
+set colorBits "yuv420p10le" "yuv420p"
+
 set sample $argv[1]
 
 if not test -f $sample
@@ -22,11 +29,6 @@ end
 set processedFilesList $resultsFolder/processed
 set gnuTimeFormat "Time result\nCommand: %C\nExit code: %x\n\nSimplified elapsed real time: %E\nElapsed real time: %es\n\nCPU percentage (user+system/time): %P\nCPU-seconds used in kernel: %S\nCPU-seconds used in user space: %U\n\nMajor or I/O page faults: %F\nMinor or recoverable page faults: %R\n\nFile system inputs: %I\nFile system outputs: %O\n\nLife-time max resident set size: %Mkb\nAvg resident set size: %tkb\nAvg total memory use (data+stack+text): %Kkb\nAvg unshared data area: %Dkb\nAvg unshared stack space: %pkb\nAvg shared text space: %X\n\nSystem's page size: %Z bytes\n\nNumber of swaps of main memory: %W\nNumber of context-switched swaps: %c\nNumber of waits: %w\n\nNumber of socket messages received: %r\nNumber of socket messages sent: %s\nNumber of signals delibered to the process %k"
 
-set presets 9 10 11 12 13
-set crfs 22 24 26 28 30 32 34 36 38 40 42 44
-set filmGrains 0
-set fastDecodes 1
-set colorBits "yuv420p10le" "yuv420p"
 
 for preset in $presets
 for crf in $crfs
