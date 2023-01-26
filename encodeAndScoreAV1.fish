@@ -1,6 +1,12 @@
 #!/bin/env fish
 
 set sample $argv[1]
+
+if not test -f $sample
+    echo "$sample doesn't exist!"
+    exit 1
+end
+
 set basenameSample $(basename $sample)
 set basedirSample $(dirname $sample)
 set exportExtension $(path extension $sample)
@@ -8,10 +14,6 @@ set exportExtension $(path extension $sample)
 set resultsFolder $basedirSample/$basenameSample-RESULTS
 set scriptFolder (dirname (status --current-filename))
 
-if not test -f $sample
-    echo "$sample doesn't exist!"
-    exit 1
-end
 
 if not test -d $resultsFolder
     mkdir $resultsFolder
