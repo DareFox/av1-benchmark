@@ -20,65 +20,52 @@ end
 set processedFilesList $resultsFolder/processed
 set gnuTimeFormat "Time result\nCommand: %C\nExit code: %x\n\nSimplified elapsed real time: %E\nElapsed real time: %es\n\nCPU percentage (user+system/time): %P\nCPU-seconds used in kernel: %S\nCPU-seconds used in user space: %U\n\nMajor or I/O page faults: %F\nMinor or recoverable page faults: %R\n\nFile system inputs: %I\nFile system outputs: %O\n\nLife-time max resident set size: %Mkb\nAvg resident set size: %tkb\nAvg total memory use (data+stack+text): %Kkb\nAvg unshared data area: %Dkb\nAvg unshared stack space: %pkb\nAvg shared text space: %X\n\nSystem's page size: %Z bytes\n\nNumber of swaps of main memory: %W\nNumber of context-switched swaps: %c\nNumber of waits: %w\n\nNumber of socket messages received: %r\nNumber of socket messages sent: %s\nNumber of signals delibered to the process %k"
 
-set presets 6 7 8 9 10
-set crfs 20 22 24 26
-set filmGrains 0 3 6 9 11
-set fastDecodes 0 1
-set colorBits 8 10
+set presets 9 10 11 12 13
+set crfs 22 24 26 28 30 32 34 36 38 40 42 44
+set filmGrains 0
+set fastDecodes 1
+set colorBits "-pix_fmt yuv420p10le" "-pix_fmt yuv420p"
 
 for preset in $presets
-    for crf in $crfs
-        for filmGrain in $filmGrains
-            for fastDecode in $fastDecodes
-            for color in $colorBits    
-                set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode-color=$color"
-                set filenameWithExtension "$basenameExport$exportExtension"
-                
-                set filenameExport "$resultsFolder/$filenameWithExtension"
-                set dateStart (date -u +%Y-%m-%dT%H-%M-%S%Z)
-                set ffmpegLogFileExport "$resultsFolder/$filenameWithExtension.ffmpeg.log"
-                set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension.gnu-time.log"
+for crf in $crfs
+for filmGrain in $filmGrains
+for fastDecode in $fastDecodes
+for color in $colorBits    
 
-                # Check if file was already processed
-                if cat $processedFilesList | grep --quiet "^$filenameWithExtension\$"   
-                    echo "$basenameExport was already processed. Skipping..."
-                    continue
-                end
+set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode-color=$color"
+set filenameWithExtension "$basenameExport$exportExtension"
 
-                set -x FFREPORT file=$ffmpegLogFileExport
-                echo "----------"
-                echo "FFREPORT file set to $ffmpegLogFileExport"
+set filenameExport "$resultsFolder/$filenameWithExtension"
+set dateStart (date -u +%Y-%m-%dT%H-%M-%S%Z)
+set ffmpegLogFileExport "$resultsFolder/$filenameWithExtension.ffmpeg.log"
+set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension.gnu-time.log"
 
-                if test $color -eq 8
-                    set PIX_FMT "-pix_fmt" "yuv420p10le"
-                else if test $color -eq 10
-                    set PIX_FMT "-pix_fmt" "yuv420p"
-                else if test $color -eq 0  
-                    set PIX_FMT ""
-                else
-                    echo "ERROR! Variable color bit ($color) is not 8 nor 10, nor 0 (auto)"
-                    exit 1
-                end
-                
-                # Auto clean on CTRL+C
-                trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $filenameWithExtension; exit" SIGINT
-
-                command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf  \
-                -svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode $PIX_FMT  -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
-    
-                # Remove auto clean
-                trap - SIGINT
-
-                # Append start date to beginning of log files
-                sed -i "1s/^/Started at $dateStart\n/" $ffmpegLogFileExport $gnuTimeLogFileExport
-                
-                # Add exported file to processed list
-                echo $filenameWithExtension >> $processedFilesList
-            end
-            end
-        end
-    end
+# Check if file was already processed
+if cat $processedFilesList | grep --quiet "^$filenameWithExtension\$"   
+    echo "$basenameExport was already processed. Skipping..."
+    continue
 end
+
+set -x FFREPORT file=$ffmpegLogFileExport
+echo "----------"
+echo "FFREPORT file set to $ffmpegLogFileExport"
+
+# Auto clean on CTRL+C
+trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $filenameWithExtension; exit" SIGINT
+
+command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf  \
+-svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode $PIX_FMT  -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
+
+# Remove auto clean
+trap - SIGINT
+
+# Append start date to beginning of log files
+sed -i "1s/^/Started at $dateStart\n/" $ffmpegLogFileExport $gnuTimeLogFileExport
+
+# Add exported file to processed list
+echo $filenameWithExtension >> $processedFilesList
+
+end end end end end
 
 echo "Starting VMAF scoring"
 
