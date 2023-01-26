@@ -34,11 +34,12 @@ for color in $colorBits
 
 set basenameExport "sample=$sample-preset=$preset-crf=$crf-filmGrain=$filmGrain-fastDecode=$fastDecode-color=$color"
 set filenameWithExtension "$basenameExport$exportExtension"
+set filenameExportPath "$resultsFolder/$filenameWithExtension"
 
-set filenameExport "$resultsFolder/$filenameWithExtension"
+set ffmpegLogFileExport "$filenameExportPath.ffmpeg.log"
+set gnuTimeLogFileExport "$filenameExportPath.gnu-time.log"
+
 set dateStart (date -u +%Y-%m-%dT%H-%M-%S%Z)
-set ffmpegLogFileExport "$resultsFolder/$filenameWithExtension.ffmpeg.log"
-set gnuTimeLogFileExport "$resultsFolder/$filenameWithExtension.gnu-time.log"
 
 # Check if file was already processed
 if cat $processedFilesList | grep --quiet "^$filenameWithExtension\$"   
@@ -54,7 +55,7 @@ echo "FFREPORT file set to $ffmpegLogFileExport"
 trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $filenameWithExtension; exit" SIGINT
 
 command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf  \
--svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode $PIX_FMT  -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExport 2>&1 | tee $gnuTimeLogFileExport
+-svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode $PIX_FMT  -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExportPath 2>&1 | tee $gnuTimeLogFileExport
 
 # Remove auto clean
 trap - SIGINT
