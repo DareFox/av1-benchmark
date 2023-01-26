@@ -65,7 +65,13 @@ sed -i "1s/^/Started at $dateStart\n/" $ffmpegLogFileExport $gnuTimeLogFileExpor
 # Add exported file to processed list
 echo $filenameWithExtension >> $processedFilesList
 
-end end end end end
+end 
+end 
+end 
+end 
+end
+# In the end it doesn't even matter
+
 
 echo "Starting VMAF scoring"
 
