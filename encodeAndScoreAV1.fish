@@ -26,7 +26,7 @@ set presets 9 10 11 12 13
 set crfs 22 24 26 28 30 32 34 36 38 40 42 44
 set filmGrains 0
 set fastDecodes 1
-set colorBits "-pix_fmt yuv420p10le" "-pix_fmt yuv420p"
+set colorBits "yuv420p10le" "yuv420p"
 
 for preset in $presets
 for crf in $crfs
@@ -57,7 +57,7 @@ echo "FFREPORT file set to $ffmpegLogFileExport"
 trap "echo \nCaught SIGINT! Removing all $basenameExport\* files \(because they are unfinished\).; $scriptFolder/removeFilesByBasename.fish $resultsFolder $filenameWithExtension; exit" SIGINT
 
 command time -f $gnuTimeFormat ffmpeg -report -i $sample -c:v libsvtav1 -preset $preset -crf $crf  \
--svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode $PIX_FMT  -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExportPath 2>&1 | tee $gnuTimeLogFileExport
+-svtav1-params film-grain=$filmGrain:fast-decode=$fastDecode -pix_fmt $color  -map 0:v -map 0:a -c:a libopus -b:a 128k $filenameExportPath 2>&1 | tee $gnuTimeLogFileExport
 
 # Remove auto clean
 trap - SIGINT
